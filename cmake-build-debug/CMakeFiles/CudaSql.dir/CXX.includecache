@@ -1,0 +1,22 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/yxl/CLionProjects/CudaSql/DataTree.h
+cstdlib
+-
+cstring
+-
+vector
+-
+
+/home/yxl/CLionProjects/CudaSql/main.cpp
+iostream
+-
+DataTree.h
+/home/yxl/CLionProjects/CudaSql/DataTree.h
+

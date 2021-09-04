@@ -1,0 +1,4 @@
+/home/yxl/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/211.6693.114/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /home/yxl/CLionProjects/CudaSql
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/yxl/CLionProjects/CudaSql/cmake-build-debug

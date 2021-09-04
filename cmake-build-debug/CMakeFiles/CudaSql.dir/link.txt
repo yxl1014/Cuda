@@ -1,0 +1,1 @@
+/usr/bin/c++ -g CMakeFiles/CudaSql.dir/main.cpp.o CMakeFiles/CudaSql.dir/DataTree.cpp.o -o CudaSql 
