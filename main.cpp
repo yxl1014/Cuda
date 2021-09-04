@@ -13,20 +13,37 @@ ResultSet doSelect(char *sql) {
 }
 
 int main() {
-    /*char * sql="";
-     *
-    DataHeadNode * node=createDataTree(sql);
-    cout<<node->data<<"\t"<<node->nodetype<<endl;*/
-    char str[] = "select * from xxx where in (select * from yyy where in (select * from where in (select * from ppp)) and (select * from ppp)))";
+   char sql1[] = "select * from xxx where in (select * from yyy where in (select * from where in (select * from ppp)) and (select * from ppp))";
+    /* const char * sql=sql1;
+     vector<char *> datas = getSqldatas(sql);//获取到拆分sql语句后的集合
+     for (vector<char *>::iterator it = datas.begin(); it != datas.end(); it++) {//遍历集合
+         cout<<*it<<endl;
+   }
+ /*
+     char *sql2="(select * from yyy where in (select * from where in (select * from ppp)) and (select * from ppp))";
+     char * temp=(char *) malloc(strlen(sql2)-2);
+     memset(temp, 0, strlen(sql2)-2);
+     memcpy(temp,sql2+1, strlen(sql2)-2);
+     cout<<temp<<endl<<endl;*/
 
-    char* data="GoldenGlobalView";
+/*    const char * sql3="select * from yyy where in (select * from where in (select * from ppp)) and (select * from ppp)";
+    vector<char *> dats2 = getSqldatas(sql3);//获取到拆分sql语句后的集合
+    for (vector<char *>::iterator it = dats2.begin(); it != dats2.end(); it++) {//遍历集合
+        cout<<*it<<endl;
+    }*/
+    char *sql = sql1;
+    DataHeadNode *node = createDataTree(sql);
+    cout << node->data << "\t" << node->nodetype << endl;
+
+
+/*    char* data="GoldenGlobalView";
     char * temp=(char *) malloc(strlen(data)-2);
     memset(temp, 0, strlen(data)-2);
     memcpy(temp,data+1, strlen(data)-2);
     cout<<temp<<endl;
     return 0;
     char *buff;
-    buff = str;
+    buff = str;*/
     /*vector<char *> datas= getSqldatas(buff);
     for (int i = 0; i < datas.size(); ++i) {
         cout<<datas[i]<<endl;

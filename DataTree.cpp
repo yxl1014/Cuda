@@ -1,9 +1,10 @@
 //
 // Created by yxl on 2021/9/4.
 //
+#include <iostream>
 #include "DataTree.h"
 
-vector<char *> getSqldatas(char *data) {
+vector<char *> getSqldatas(const char *data) {
     vector<char *> datas;//申明一个集合
     char *p;//临时字符串
     char *buff = (char *) malloc(strlen(data));//申明一个字符串
@@ -32,8 +33,11 @@ vector<char *> getSqldatas(char *data) {
                 while (p[strlen(p) - j] == ')') {//循环判断p的最后一个字符是不是)
                     i -= 1;//若是则i-1
                     j++;//j++，防止出现两个))连载一起的情况；如：select * from xxx where in (select * from yyy where in (select * from where in (select * from ppp)) and (select * from ppp)))
-                    if (i == 0)//若i=0，则说明嵌套sql结束，向集合的最后添加数据temp
-                        datas.push_back(temp);
+                    if (i == 0) {//若i=0，则说明嵌套sql结束，向集合的最后添加数据temp
+                        char * ok=(char *) malloc(strlen(temp));
+                        strcpy(ok,temp);
+                        datas.push_back(ok);
+                    }
                 }
             }
 
@@ -48,47 +52,53 @@ vector<char *> getSqldatas(char *data) {
 
 void addNode(DataHeadNode *head, char *data) {
     ListNode *node = (ListNode *) malloc(sizeof(ListNode *));//申请一块链表内存
-    memset(node,0,sizeof (node));//清空内存
+    memset(node, 0, sizeof(node));//清空内存
     DataNode *dataNode;//申明一个树节点
 
 
     if (data[0] == '(') {//若数据是sql则创建子节点
-        char * temp=(char *) malloc(strlen(data)-2);//申请比data小2的临时内存
-        memset(temp, 0, strlen(data)-2);//清空内存
-        memcpy(temp,data+1, strlen(data)-2);//将data掐头去尾拷贝到temp里
-        dataNode= createDataTree(temp);//将data再次分解
-    } else{
-        dataNode= (DataNode *) malloc(sizeof(DataNode *));//申请一个treenode
-        memset(dataNode,0,sizeof (dataNode));//清空内存
+        char *temp = (char *) malloc(strlen(data) - 2);//申请比data小2的临时内存
+        memset(temp, 0, strlen(data) - 2);//清空内存
+        memcpy(temp, data + 1, strlen(data) - 2);//将data掐头去尾拷贝到temp里
+        dataNode = createDataTree(temp);//将data再次分解
+    } else {
+        dataNode = (DataNode *) malloc(sizeof(DataNode *));//申请一个treenode
+        memset(dataNode, 0, sizeof(dataNode));//清空内存
+        dataNode->data = (char *) malloc(strlen(data));
         strcpy(dataNode->data, data);//拷贝data
+        cout << dataNode->data << endl;
     }
 
 
-    if (head->headnode == nullptr) {//若这个listnode是第一个
-        node->data=dataNode;//将treenode赋值给listnode的data
-        head->headnode=node;//将head的headnode、datalist、tailnode指向这个节点
-        head->dataList=node;
-        head->tailnode=node;
+    node->data = dataNode;//将treenode赋值给listnode的data
+    if (head->dataList == nullptr) {//若这个listnode是第一个
+        head->dataList = node;
+        head->tailnode = node;
         return;
     }
-    head->tailnode->next=node;//若不是使用尾插法插入listnode节点
-    node->pre=head->tailnode;
-    head->tailnode=node;
-    node->next= nullptr;
+    head->tailnode->next = node;//若不是使用尾插法插入listnode节点
+    node->pre = head->tailnode;
+    head->tailnode = node;
+    node->next = nullptr;
 }
 
 DataHeadNode *createDataTree(char *sql) {
     DataHeadNode *headNode = (DataHeadNode *) malloc(sizeof(DataHeadNode *));//申明一个新的treenode头结点
     memset(headNode, 0, sizeof(headNode));//清空内存
     headNode->nodetype = 5;//设置该节点类型为 集合 及 嵌套的sql语句
-    strcpy(headNode->data,sql);//将数据拷贝到节点
+
+    headNode->data = (char *) malloc(strlen(sql));
+    memset(headNode->data, 0, strlen(sql));
+
+    strcpy(headNode->data, sql);//将数据拷贝到节点
+    cout << headNode->data << endl;
     headNode->dataList = nullptr;//初始化treenode头结点
-    headNode->headnode = nullptr;
     headNode->tailnode = nullptr;
 
     //memset(headNode->dataList, 0, sizeof(headNode->dataList));
+    const char *data = headNode->data;
 
-    vector<char *> datas = getSqldatas(headNode->data);//获取到拆分sql语句后的集合
+    vector<char *> datas = getSqldatas(data);//获取到拆分sql语句后的集合
     for (vector<char *>::iterator it = datas.begin(); it != datas.end(); it++) {//遍历集合
         addNode(headNode, *it);//添加子节点
     }

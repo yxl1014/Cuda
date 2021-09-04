@@ -10,7 +10,6 @@ typedef struct DataNode {
     char *data;
 //该节点名(每一段的内容)，头结点此处为空
     struct ListNode *dataList;//(一个双向链表),节点中的数据为DataNode
-    struct ListNode *headnode;
     struct ListNode *tailnode;
 //节点的叶子节点们
 } DataNode, DataHeadNode;
@@ -26,4 +25,4 @@ typedef struct ListNode {
 
 extern DataHeadNode *createDataTree(char *sql);
 
-vector<char *> getSqldatas(char *data);
+vector<char *> getSqldatas(const char *data);
